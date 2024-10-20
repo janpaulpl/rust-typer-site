@@ -139,7 +139,7 @@ fileGuessBtn.addEventListener('click', () => {
         fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! Loading an image...</span>`;
         output.innerHTML = ''; // Clear the text
         // Load and display the image
-        output.innerHTML = `<img id="error-image" src="./assets/img/wrong-answer.jpg" alt="Error image" />`;
+        output.innerHTML = `<img id="error-image" src="./assets/img/rust.jpg" alt="Error image" />`;
     }
 });
 
