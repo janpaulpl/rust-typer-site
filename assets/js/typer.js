@@ -14,7 +14,7 @@ let inTerminalMode = false;
 
 // Create Terminal Mode button
 const terminalModeBtn = document.createElement("button");
-terminalModeBtn.innerHTML = "Terminal Mode";
+terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
 terminalModeBtn.id = "terminal-mode-btn";
 
 // Move Terminal Mode button to the top
@@ -185,7 +185,7 @@ randomFileButton.addEventListener("click", () => {
     fileGuessInput.value = '';
     testFinished = false;
     inTerminalMode = false;
-    terminalModeBtn.innerHTML = "Terminal Mode";
+    terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
 });
 
 // File guessing game logic
@@ -195,7 +195,7 @@ fileGuessBtn.addEventListener('click', () => {
     if (guess === currentFileName) {
         fileGuessOutput.innerHTML = `<span class="correct">You got it! Completing the code... Crab WPM: ${wpm} 🦀</span>`;
         inTerminalMode = false;
-        terminalModeBtn.innerHTML = "Terminal Mode";
+        terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
         output.innerHTML = applyRustHighlighting(fullCode);
         output.classList.remove('low-opacity');
         testFinished = true;
@@ -205,7 +205,7 @@ fileGuessBtn.addEventListener('click', () => {
         document.getElementById("error-image").addEventListener('click', () => {
             loadRandomFile();
             inTerminalMode = true;
-            terminalModeBtn.innerHTML = "Exit Terminal Mode";
+            terminalModeBtn.innerHTML = "<code>:q</code>";
             currentChar = 0;
             displayCode();
         });
@@ -224,7 +224,7 @@ function handleTerminalMode() {
     if (currentChar >= fullCode.length) {
         endSpeedTypingTest();
         inTerminalMode = false;
-        terminalModeBtn.innerHTML = "Terminal Mode";
+        terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
     }
 }
 
@@ -232,11 +232,11 @@ function handleTerminalMode() {
 terminalModeBtn.addEventListener("click", () => {
     inTerminalMode = !inTerminalMode;
     if (inTerminalMode) {
-        terminalModeBtn.innerHTML = "Exit Terminal Mode";
+        terminalModeBtn.innerHTML = "<code>:q</code>";
         currentChar = 0;
         startTypingTest();
     } else {
-        terminalModeBtn.innerHTML = "Terminal Mode";
+        terminalModeBtn.innerHTML = "<Terminal<code>.rs</code>";
     }
     displayCode();
 });
