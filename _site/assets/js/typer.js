@@ -14,7 +14,7 @@ let inTerminalMode = false;
 
 // Create Terminal Mode button
 const terminalModeBtn = document.createElement("button");
-terminalModeBtn.innerHTML = "Terminal Mode";
+terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
 terminalModeBtn.id = "terminal-mode-btn";
 
 // Move Terminal Mode button to the top
@@ -175,7 +175,7 @@ function endSpeedTypingTest() {
     const wpm = calculateWPM();
     output.innerHTML = applyRustHighlighting(fullCode);
     output.classList.remove('low-opacity');
-    output.innerHTML += `<br><span style="color: green;">You Win! WPM: ${wpm}. Click "Random File" to play again.</span>`;
+    output.innerHTML += `<br><span style="color: green;">You Win! WPM: ${wpm}. Click "Random<code>.rs</code>" to play again.</span>`;
 }
 
 // Reset game and load a new file when "Load New" button is clicked
