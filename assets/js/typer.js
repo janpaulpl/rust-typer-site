@@ -15,8 +15,6 @@ let typedChars = 0;
 let inTerminalMode = false;
 let terminalModeLastPosition = 0;
 let isFullscreen = false;
-const fullscreenPath = document.getElementById('fullscreen-path');
-const unfullscreenPath = document.getElementById('unfullscreen-path');
 
 // Rust-themed shitpost message
 const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
@@ -122,13 +120,51 @@ function displayCode() {
     if (cursorElement) {
         cursorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    // Ensure the fullscreen icon is the last child of the output container
-    outputContainer.appendChild(fullscreenIcon);
 }
 
+// Function to check if the device is mobile
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
+// Function to handle taps on the output area
+function handleOutputTap(event) {
+    if (isMobileDevice()) {
+        // Prevent the default action to avoid any unwanted behavior
+        event.preventDefault();
+        
+        // Create a temporary input element
+        const tempInput = document.createElement('input');
+        tempInput.style.position = 'absolute';
+        tempInput.style.opacity = 0;
+        tempInput.style.height = 0;
+        tempInput.style.fontSize = '16px'; // This prevents zoom on iOS
+
+        // Add it to the body
+        document.body.appendChild(tempInput);
+
+        // Focus and remove the element
+        tempInput.focus();
+        setTimeout(() => {
+            document.body.removeChild(tempInput);
+        }, 100);
+
+        // Re-focus on the output element
+        output.focus();
+    }
+}
+
+// Add the event listener to the output element
+output.addEventListener('touchstart', handleOutputTap);
+
+// Prevent default keyboard behavior and handle typing
+output.addEventListener('keydown', function(e) {
+    e.preventDefault();
+    handleTyping(e);
+});
+
 // Handle typing
-document.addEventListener('keydown', (event) => {
+function handleTyping(event) {
     if (document.activeElement === fileGuessInput || testFinished) {
         return;
     }
@@ -136,8 +172,6 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt') {
         return; // Ignore modifier keys
     }
-
-    event.preventDefault(); // Prevent default for all other keys
 
     if (inTerminalMode) {
         handleTerminalMode();
@@ -169,7 +203,10 @@ document.addEventListener('keydown', (event) => {
                 `<span class="low-opacity">${remainingText}</span>`;
         }
     }
-});
+}
+
+// Replace the existing keydown event listener with this one
+document.addEventListener('keydown', handleTyping);
 
 function startTypingTest() {
     startTime = new Date();
@@ -237,7 +274,7 @@ function handleTerminalMode() {
 terminalModeBtn.addEventListener("click", () => {
     inTerminalMode = !inTerminalMode;
     if (inTerminalMode) {
-        terminalModeBtn.innerHTML = "<code>:wq</code>";
+        terminalModeBtn.innerHTML = "<code>:q</code>";
         currentChar = terminalModeLastPosition;
         startTypingTest();
     } else {
@@ -259,11 +296,11 @@ function toggleFullscreen() {
     isFullscreen = !isFullscreen;
     outputContainer.classList.toggle('fullscreen-mode', isFullscreen);
     if (isFullscreen) {
-        fullscreenPath.style.display = 'none';
-        unfullscreenPath.style.display = '';
+        document.getElementById('fullscreen-path').style.display = 'none';
+        document.getElementById('unfullscreen-path').style.display = '';
     } else {
-        fullscreenPath.style.display = '';
-        unfullscreenPath.style.display = 'none';
+        document.getElementById('fullscreen-path').style.display = '';
+        document.getElementById('unfullscreen-path').style.display = 'none';
     }
     // Ensure the cursor is still visible after toggling fullscreen
     const cursorElement = output.querySelector('.cursor') || output.querySelector('.thick-cursor');
