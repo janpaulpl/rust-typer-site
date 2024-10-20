@@ -49,7 +49,7 @@ async function loadRandomFile() {
     try {
         output.textContent = 'Loading a random file...';
 
-        const fileListResponse = await fetch('/assets/data/files.json'); // Fetch the list of files
+        const fileListResponse = await fetch('./assets/data/files.json'); // Fetch the list of files
         if (!fileListResponse.ok) throw new Error('Could not fetch files.json');
         
         const fileListData = await fileListResponse.json();
