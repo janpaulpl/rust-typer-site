@@ -63,7 +63,7 @@ async function loadRandomFile() {
         const randomFile = files[Math.floor(Math.random() * files.length)];
 
         // Fetch the content of the random file
-        const response = await fetch(`/assets/data/${randomFile}`);
+        const response = await fetch(`./assets/data/${randomFile}`);
         if (!response.ok) throw new Error(`File not found: ${randomFile}`);
 
         // Read and split file content into lines
