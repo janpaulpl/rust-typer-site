@@ -17,6 +17,10 @@
             font-weight: bold;
         }
 
+        h2 {
+            color: #fabd2f;
+        }
+
         #output {
             background-color: #1d2021;
             color: #ebdbb2;
@@ -25,6 +29,12 @@
             white-space: pre-wrap;
             font-size: 12px; /* Smaller font size */
             margin-top: 20px;
+        }
+
+        #file-guess-output {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         button, .custom-file-upload {
@@ -47,8 +57,19 @@
             display: none; /* Hide the actual file input */
         }
 
-        /* Custom file upload button style */
-        label.custom-file-upload {
+        input[type="text"] {
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #file-guess-btn {
+            font-size: 14px;
+        }
+
+        .custom-file-upload {
             cursor: pointer;
         }
 
@@ -64,6 +85,14 @@
 
         .symbol {
             color: #8ec07c;  /* Gruvbox green */
+        }
+
+        .correct {
+            color: #b8bb26; /* Gruvbox green */
+        }
+
+        .wrong {
+            color: #fb4934; /* Gruvbox red */
         }
 
         /* Learn Rust section styling */
@@ -82,6 +111,12 @@
         .learn-rust a:hover {
             text-decoration: underline;
         }
+
+        /* Image styling */
+        #error-image {
+            max-width: 100%;
+            margin-top: 20px;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -95,6 +130,15 @@
     <br><br>
     <pre id="output"></pre>
 
+    <!-- File guessing game section -->
+    <div id="file-guess-game">
+        <h2>Guess the File Name</h2>
+        <p>If you're bored and want to complete the file, guess the name, and it will complete the code for you.</p>
+        <input type="text" id="file-guess" placeholder="Enter file name..." />
+        <button id="file-guess-btn">Submit Guess</button>
+        <div id="file-guess-output"></div>
+    </div>
+
     <!-- "Learn Rust" message at the bottom -->
     <div class="learn-rust">
         <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">this Rust book</a> by Brown University.</p>
@@ -103,3 +147,4 @@
     <script src="./assets/js/typer.js"></script>
 </body>
 </html>
+

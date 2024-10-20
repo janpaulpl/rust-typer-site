@@ -1,11 +1,14 @@
 const output = document.querySelector("#output");
 const randomFileButton = document.getElementById("random-file-btn");
 const fileUpload = document.getElementById("file-upload");
-const errorMessage = document.getElementById("error-message");
+const fileGuessBtn = document.getElementById("file-guess-btn");
+const fileGuessOutput = document.getElementById("file-guess-output");
+const fileGuessInput = document.getElementById("file-guess");
 let lines = [];
 let currentLine = 0;
 let currentChar = 0;
 let buffer = '';  // Buffer to hold the characters of the current line
+let currentFileName = ''; // Variable to hold the current file name
 
 // Rust-themed shitpost message
 const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
@@ -61,6 +64,7 @@ async function loadRandomFile() {
 
         // Choose a random file from the list
         const randomFile = files[Math.floor(Math.random() * files.length)];
+        currentFileName = randomFile;
 
         // Fetch the content of the random file
         const response = await fetch(`./assets/data/${randomFile}`);
@@ -80,6 +84,11 @@ async function loadRandomFile() {
         output.textContent = 'Error loading file. Check console for details.';
     }
 }
+
+// Automatically load a random file when the page loads
+window.addEventListener('load', () => {
+    loadRandomFile();
+});
 
 // Displays the next 5-10 characters in the current file with manual Rust highlighting
 function displayNextChars() {
@@ -112,18 +121,33 @@ function displayNextChars() {
 }
 
 // Listen for keypress events to simulate typing
-document.addEventListener("keypress", (event) => {
+document.addEventListener('keypress', (event) => {
     if (event.key.length === 1) { // Only handle actual character input
         displayNextChars();  // Display 5-10 characters per keystroke
     }
 });
 
-// Load a new random file when the button is clicked
+// File guessing game logic
+fileGuessBtn.addEventListener('click', () => {
+    const guess = fileGuessInput.value.trim();
+    if (guess === currentFileName) {
+        // Correct guess
+        fileGuessOutput.innerHTML = `<span class="correct">You got it! Completing the code...</span>`;
+        output.innerHTML = applyRustHighlighting(lines.join("\n")); // Display full file
+    } else {
+        // Wrong guess
+        fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! <code>.rs</code> is important!</span>`;
+        output.innerHTML = ''; // Clear the text
+        // Load and display the image
+        output.innerHTML = `<img id="error-image" src="./assets/img/rust.jpg" alt="Error image" />`;
+    }
+});
+
+// Reset game and load a new file when "Load New" button is clicked
 randomFileButton.addEventListener("click", () => {
     loadRandomFile();  // Load a new random file
     buffer = '';  // Reset buffer for new file
     output.innerHTML = '';  // Clear output for new content
+    fileGuessOutput.innerHTML = '';  // Clear the guess output
+    fileGuessInput.value = '';  // Clear the input field
 });
-
-// Initially load a random file
-loadRandomFile();
