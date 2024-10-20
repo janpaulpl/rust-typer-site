@@ -15,6 +15,8 @@ let typedChars = 0;
 let inTerminalMode = false;
 let terminalModeLastPosition = 0;
 let isFullscreen = false;
+const fullscreenPath = document.getElementById('fullscreen-path');
+const unfullscreenPath = document.getElementById('unfullscreen-path');
 
 // Rust-themed shitpost message
 const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
@@ -235,7 +237,7 @@ function handleTerminalMode() {
 terminalModeBtn.addEventListener("click", () => {
     inTerminalMode = !inTerminalMode;
     if (inTerminalMode) {
-        terminalModeBtn.innerHTML = "<code>:q</code>";
+        terminalModeBtn.innerHTML = "<code>:wq</code>";
         currentChar = terminalModeLastPosition;
         startTypingTest();
     } else {
@@ -257,13 +259,11 @@ function toggleFullscreen() {
     isFullscreen = !isFullscreen;
     outputContainer.classList.toggle('fullscreen-mode', isFullscreen);
     if (isFullscreen) {
-        fullscreenIcon.innerHTML = `
-            <path d="M4 14h16M4 14v6a2 2 0 002 2h12a2 2 0 002-2v-6M4 14l6-6m-6 6l6 6m10-6l-6-6m6 6l-6 6"></path>
-        `;
+        fullscreenPath.style.display = 'none';
+        unfullscreenPath.style.display = '';
     } else {
-        fullscreenIcon.innerHTML = `
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-        `;
+        fullscreenPath.style.display = '';
+        unfullscreenPath.style.display = 'none';
     }
     // Ensure the cursor is still visible after toggling fullscreen
     const cursorElement = output.querySelector('.cursor') || output.querySelector('.thick-cursor');
