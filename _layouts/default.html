@@ -183,6 +183,10 @@
             z-index: 1001;
         }
 
+        #file-guess-game {
+            margin-bottom: 40px; /* Add space below the file guess game */
+        }
+
         #footnotes-container {
             margin-top: auto;
         }
@@ -206,6 +210,12 @@
 
         .footnote a:hover {
             text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            #file-guess-game {
+                margin-bottom: 60px; /* Increase space on mobile */
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
@@ -242,7 +252,7 @@
         </div>
 
         <div class="footnote">
-            Don't like the current state of the site—at all even? Learn some Rust by contributing to <a href="http://github.com/janpaulpl/rust-typer-site" target="_blank">this repo</a>!!
+            Don't like the site's current state—at all even? Learn Rust by contributing to <a href="http://github.com/janpaulpl/rust-typer-site" target="_blank">this repo</a>!!
         </div>
     </div>
 
