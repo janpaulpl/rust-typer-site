@@ -5,6 +5,7 @@ const fileGuessBtn = document.getElementById("file-guess-btn");
 const fileGuessInput = document.getElementById("file-guess");
 const terminalModeBtn = document.getElementById("terminal-mode-btn");
 const fullscreenIcon = document.getElementById("fullscreen-icon");
+const outputContainer = document.getElementById('output-container');
 let fullCode = '';
 let currentChar = 0;
 let currentFileName = '';
@@ -13,6 +14,7 @@ let startTime;
 let typedChars = 0;
 let inTerminalMode = false;
 let terminalModeLastPosition = 0;
+let isFullscreen = false;
 
 // Rust-themed shitpost message
 const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
@@ -118,6 +120,9 @@ function displayCode() {
     if (cursorElement) {
         cursorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+
+    // Ensure the fullscreen icon is the last child of the output container
+    outputContainer.appendChild(fullscreenIcon);
 }
 
 // Handle typing
@@ -248,11 +253,9 @@ output.addEventListener('click', (event) => {
 });
 
 // Fullscreen functionality
-let isFullscreen = false;
-
 function toggleFullscreen() {
     isFullscreen = !isFullscreen;
-    document.body.classList.toggle('fullscreen-mode', isFullscreen);
+    outputContainer.classList.toggle('fullscreen-mode', isFullscreen);
     if (isFullscreen) {
         fullscreenIcon.innerHTML = `
             <path d="M4 14h16M4 14v6a2 2 0 002 2h12a2 2 0 002-2v-6M4 14l6-6m-6 6l6 6m10-6l-6-6m6 6l-6 6"></path>
@@ -261,6 +264,11 @@ function toggleFullscreen() {
         fullscreenIcon.innerHTML = `
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
         `;
+    }
+    // Ensure the cursor is still visible after toggling fullscreen
+    const cursorElement = output.querySelector('.cursor') || output.querySelector('.thick-cursor');
+    if (cursorElement) {
+        cursorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 

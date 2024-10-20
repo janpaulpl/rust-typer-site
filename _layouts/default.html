@@ -26,6 +26,11 @@
             color: #fabd2f;
         }
 
+        #output-container {
+            position: relative;
+            margin-top: 20px;
+        }
+
         #output {
             background-color: #1d2021;
             color: #ebdbb2;
@@ -33,7 +38,6 @@
             border-radius: 8px;
             white-space: pre-wrap;
             font-size: 12px;
-            margin-top: 20px;
             max-height: 400px;
             overflow-y: auto;
             scrollbar-width: none; /* Firefox */
@@ -154,14 +158,20 @@
         }
 
         #fullscreen-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 30px;
-            height: 30px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             z-index: 1000;
             fill: #ebdbb2;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        #fullscreen-icon:hover {
+            opacity: 1;
         }
 
         .fullscreen-mode #output {
@@ -197,7 +207,12 @@
         <input type="file" id="file-upload" />
     </div>
 
-    <pre id="output"></pre>
+    <div id="output-container">
+        <pre id="output"></pre>
+        <svg id="fullscreen-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+    </div>
 
     <div id="file-guess-game">
         <h2>Filename<code>.rs</code></h2>
@@ -209,10 +224,6 @@
     <div class="learn-rust">
         <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">the Rust book</a> by some researchers at <a href="https://arxiv.org/abs/2309.04134" target="_blank">Brown University</a>.</p>
     </div>
-
-    <svg id="fullscreen-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-    </svg>
 
     <script src="./assets/js/typer.js"></script>
 </body>
