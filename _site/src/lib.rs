@@ -1,24 +1,58 @@
 use wasm_bindgen::prelude::*;
-use getrandom::getrandom;
+use serde::Deserialize;
 
+// Rust file for WebAssembly support
+
+// External function to write output to the DOM
 #[wasm_bindgen]
-pub fn start_typing_simulation() -> String {
-    // Simulated code lines
-    let code_lines = vec![
-        "fn main() {",
-        "    println!(\"Hello, world!\");",
-        "}",
-        "for i in 0..10 {",
-        "    println!(\"{}\", i);",
-        "}",
-        "// End of the simulated Rust code."
-    ];
+extern {
+    fn write_output(s: &str);
+}
 
-    // Get random bytes and convert them to an index
-    let mut buf = [0u8; 1];  // 1 byte buffer, giving values from 0 to 255
-    getrandom(&mut buf).expect("Failed to get random bytes");
-    let random_index = (buf[0] as usize) % code_lines.len();  // Use modulus to get a valid index
+// Shitpost message for non-Rust files
+#[wasm_bindgen]
+pub fn get_shitpost() -> String {
+    "What is this, JavaScript? Upload Rust files only, hacker! 🦀".to_string()
+}
 
-    // Return the selected random code line to be displayed
-    code_lines[random_index].to_string()
+// Apply Rust syntax highlighting (similar logic as before)
+#[wasm_bindgen]
+pub fn apply_rust_highlighting(text: &str) -> String {
+    let mut highlighted_text = text.to_string();
+    highlighted_text = highlighted_text
+        .replace("fn", "<span class='keyword'>fn</span>")
+        .replace("let", "<span class='keyword'>let</span>")
+        .replace("const", "<span class='keyword'>const</span>")
+        .replace("use", "<span class='keyword'>use</span>")
+        .replace("mod", "<span class='keyword'>mod</span>")
+        .replace("impl", "<span class='keyword'>impl</span>")
+        .replace("struct", "<span class='keyword'>struct</span>")
+        .replace("enum", "<span class='keyword'>enum</span>");
+
+    highlighted_text = highlighted_text
+        .replace("i32", "<span class='type'>i32</span>")
+        .replace("u32", "<span class='type'>u32</span>")
+        .replace("String", "<span class='type'>String</span>")
+        .replace("Vec", "<span class='type'>Vec</span>");
+
+    highlighted_text = highlighted_text
+        .replace("{", "<span class='symbol'>{</span>")
+        .replace("}", "<span class='symbol'>}</span>")
+        .replace("(", "<span class='symbol'>(</span>")
+        .replace(")", "<span class='symbol'>)</span>")
+        .replace("=>", "<span class='symbol'>=></span>")
+        .replace("::", "<span class='symbol'>::</span>")
+        .replace(",", "<span class='symbol'>,</span>")
+        .replace(";", "<span class='symbol'>;</span>");
+        
+    highlighted_text
+}
+
+// Simulate typing functionality
+#[wasm_bindgen]
+pub fn simulate_typing(text: &str) -> String {
+    // In this simplified version, we'll just return the full content as a string
+    let mut typed_text = String::new();
+    typed_text.push_str(text);
+    typed_text
 }

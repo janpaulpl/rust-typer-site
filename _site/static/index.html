@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Typing Game</title>
+    <style>
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: #282828;
+            color: #ebdbb2;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #fb4934;
+            font-weight: bold;
+        }
+
+        #output {
+            background-color: #1d2021;
+            color: #ebdbb2;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button, .custom-file-upload {
+            background-color: #458588;
+            border: none;
+            padding: 10px 15px;
+            color: #ebdbb2;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        button:hover, .custom-file-upload:hover {
+            background-color: #83a598;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.custom-file-upload {
+            cursor: pointer;
+        }
+
+        .keyword {
+            color: #d79921;
+            font-weight: bold;
+        }
+
+        .type {
+            color: #b16286;
+            font-weight: bold;
+        }
+
+        .symbol {
+            color: #8ec07c;
+        }
+
+        .learn-rust {
+            margin-top: 50px;
+            text-align: center;
+            color: #b8bb26;
+            font-size: 18px;
+        }
+
+        .learn-rust a {
+            color: #fabd2f;
+            text-decoration: none;
+        }
+
+        .learn-rust a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rust Typing Game</h1>
+    <button id="random-file-btn">Load New Random File</button>
+    <label for="file-upload" class="custom-file-upload">Choose File</label>
+    <input type="file" id="file-upload" />
+    <br><br>
+    <pre id="output"></pre>
+
+    <div class="learn-rust">
+        <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">this Rust book</a> by Brown University.</p>
+    </div>
+
+    <script type="module" src="js/index.js"></script>
+</body>
+</html>

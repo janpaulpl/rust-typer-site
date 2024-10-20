@@ -3,16 +3,29 @@
 /**
  * @returns {string}
  */
-export function start_typing_simulation(): string;
+export function get_shitpost(): string;
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+export function apply_rust_highlighting(text: string): string;
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+export function simulate_typing(text: string): string;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly start_typing_simulation: (a: number) => void;
+  readonly get_shitpost: (a: number) => void;
+  readonly apply_rust_highlighting: (a: number, b: number, c: number) => void;
+  readonly simulate_typing: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
-  readonly __wbindgen_exn_store: (a: number) => void;
+  readonly __wbindgen_malloc: (a: number, b: number) => number;
+  readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;

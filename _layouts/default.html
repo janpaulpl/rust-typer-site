@@ -44,10 +44,9 @@
         }
 
         input[type="file"] {
-            display: none; /* Hide the actual file input */
+            display: none;
         }
 
-        /* Custom file upload button style */
         label.custom-file-upload {
             cursor: pointer;
         }
@@ -66,7 +65,6 @@
             color: #8ec07c;  /* Gruvbox green */
         }
 
-        /* Learn Rust section styling */
         .learn-rust {
             margin-top: 50px;
             text-align: center;
@@ -82,6 +80,11 @@
         .learn-rust a:hover {
             text-decoration: underline;
         }
+
+        #guess-result {
+            font-size: 16px;
+            margin-top: 10px;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -95,11 +98,11 @@
     <br><br>
     <pre id="output"></pre>
 
-    <!-- "Learn Rust" message at the bottom -->
+    <!-- File name guessing game -->
+    <h2>Can you guess the file name?</h2>
+    <input type="text" id="guess-input" placeholder="Enter your guess">
+    <button id="guess-button">Submit Guess</button>
+    <div id="guess-result"></div>
+
     <div class="learn-rust">
         <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">this Rust book</a> by Brown University.</p>
-    </div>
-
-    <script src="./assets/js/typer.js"></script>
-</body>
-</html>
