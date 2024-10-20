@@ -19,6 +19,9 @@ const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
 // Function to apply basic syntax highlighting
 function applyRustHighlighting(text) {
     return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
         .replace(/\b(fn|let|const|use|mod|pub|impl|struct|enum)\b/g, '<span class="keyword">$1</span>')
         .replace(/\b(i32|u32|String|Vec)\b/g, '<span class="type">$1</span>')
         .replace(/({|}|\(|\)|=>|::|,|;)/g, '<span class="symbol">$1</span>');
@@ -98,15 +101,15 @@ function displayCode() {
     if (nextChar === ' ' || nextChar === '\n') {
         highlightedNextChar = '<span style="background-color: #3c3836;">␣</span>';
     } else if (nextChar === '\t') {
-        highlightedNextChar = '<span style="background-color: #3c3836;">␣␣</span>';
+        highlightedNextChar = '<span style="background-color: #3c3836;">␣␣␣␣</span>';
     }
 
     if (inTerminalMode) {
-        output.innerHTML = applyRustHighlighting(typedText) + '<span class="thick-cursor">█</span>';
+        output.innerHTML = applyRustHighlighting(typedText) + '<span class="thick-cursor" style="color: #ebdbb2; background-color: #ebdbb2;">█</span>';
     } else {
         output.innerHTML = `${applyRustHighlighting(typedText)}` +
             `<span class="cursor">${highlightedNextChar}</span>` +
-            `<span class="low-opacity">${applyRustHighlighting(remainingText)}</span>`;
+            `<span class="low-opacity">${remainingText}</span>`;
     }
 
     // Scroll to keep the cursor in view
@@ -139,8 +142,8 @@ document.addEventListener('keydown', (event) => {
             currentChar++;
             typedChars++;
             if (expectedChar === '\t') {
-                currentChar++; // Skip an extra space for tab
-                typedChars++; // Count tab as two characters
+                currentChar += 3; // Skip three extra spaces for tab (4 spaces total)
+                typedChars += 3; // Count tab as four characters
             }
             displayCode();
 
@@ -155,7 +158,7 @@ document.addEventListener('keydown', (event) => {
 
             output.innerHTML = `${applyRustHighlighting(typedText)}` +
                 wrongChar +
-                `<span class="low-opacity">${applyRustHighlighting(remainingText)}</span>`;
+                `<span class="low-opacity">${remainingText}</span>`;
         }
     }
 });
@@ -209,8 +212,8 @@ function handleTerminalMode() {
         currentChar++;
         typedChars++;
         if (fullCode[currentChar - 1] === '\t') {
-            currentChar++; // Skip an extra space for tab
-            typedChars++; // Count tab as two characters
+            currentChar += 3; // Skip three extra spaces for tab (4 spaces total)
+            typedChars += 3; // Count tab as four characters
         }
     }
     displayCode();
