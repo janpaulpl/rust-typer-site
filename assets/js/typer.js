@@ -4,6 +4,7 @@ const fileUpload = document.getElementById("file-upload");
 const fileGuessBtn = document.getElementById("file-guess-btn");
 const fileGuessInput = document.getElementById("file-guess");
 const terminalModeBtn = document.getElementById("terminal-mode-btn");
+const fullscreenIcon = document.getElementById("fullscreen-icon");
 let fullCode = '';
 let currentChar = 0;
 let currentFileName = '';
@@ -245,6 +246,25 @@ output.addEventListener('click', (event) => {
         loadRandomFile();
     }
 });
+
+// Fullscreen functionality
+let isFullscreen = false;
+
+function toggleFullscreen() {
+    isFullscreen = !isFullscreen;
+    document.body.classList.toggle('fullscreen-mode', isFullscreen);
+    if (isFullscreen) {
+        fullscreenIcon.innerHTML = `
+            <path d="M4 14h16M4 14v6a2 2 0 002 2h12a2 2 0 002-2v-6M4 14l6-6m-6 6l6 6m10-6l-6-6m6 6l-6 6"></path>
+        `;
+    } else {
+        fullscreenIcon.innerHTML = `
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        `;
+    }
+}
+
+fullscreenIcon.addEventListener('click', toggleFullscreen);
 
 // Initialize the game
 loadRandomFile();
