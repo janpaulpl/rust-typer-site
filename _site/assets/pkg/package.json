@@ -1,0 +1,15 @@
+{
+  "name": "rust-typer",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "rust_typer_bg.wasm",
+    "rust_typer.js",
+    "rust_typer.d.ts"
+  ],
+  "main": "rust_typer.js",
+  "types": "rust_typer.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

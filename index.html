@@ -1,0 +1,19 @@
+---
+layout: default
+---
+
+<div class="container">
+    <div id="output">Loading a random file...</div>
+
+    <!-- File Upload for Rust files or any other files -->
+    <label for="file-upload" class="custom-file-upload">Choose File</label>
+    <input type="file" id="file-upload">
+    
+    <label for="random-file-btn" class="custom-file-upload">Load New Random File</label>
+    <button id="random-file-btn" style="display:none;"></button>
+
+    <!-- Error message for non-Rust files -->
+    <div id="error-message" style="display: none;">
+        This is Rust Typer! Only Rust files are allowed. What is this, Hacker Typer?!
+    </div>
+</div>
