@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Typer.rs">
+    <meta property="og:title" content="Typing.rs">
     <meta property="og:description" content="A typing game on the Rust compiler.">
     <meta property="og:image" content="https://janpaulpl.github.io/assets/img/favicon.ico">
     <meta property="og:url" content="https://janpaul.pl">
@@ -15,6 +15,10 @@
             background-color: #282828;
             color: #ebdbb2;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
         }
 
         h1 {
@@ -130,22 +134,6 @@
             opacity: 1;
         }
 
-        .learn-rust {
-            margin-top: 50px;
-            text-align: center;
-            color: #b8bb26;
-            font-size: 18px;
-        }
-
-        .learn-rust a {
-            color: #fabd2f;
-            text-decoration: none;
-        }
-
-        .learn-rust a:hover {
-            text-decoration: underline;
-        }
-
         #error-image {
             max-width: 100%;
             margin-top: 20px;
@@ -193,6 +181,31 @@
             position: fixed;
             z-index: 1001;
         }
+
+        #footnotes-container {
+            margin-top: auto;
+        }
+
+        .footnote {
+            text-align: center;
+            padding: 10px;
+            background-color: #1d2021;
+            color: #928374;
+            font-size: 12px;
+        }
+
+        .footnote:not(:last-child) {
+            margin-bottom: 2px;
+        }
+
+        .footnote a {
+            color: #fabd2f;
+            text-decoration: none;
+        }
+
+        .footnote a:hover {
+            text-decoration: underline;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -221,8 +234,14 @@
         <button id="file-guess-btn">Submit<code>.rs</code></button>
     </div>
 
-    <div class="learn-rust">
-        <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">the Rust book</a> by some researchers at <a href="https://arxiv.org/abs/2309.04134" target="_blank">Brown University</a>.</p>
+    <div id="footnotes-container">
+        <div class="footnote">
+            Want to learn the language? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">the Rust book</a> by some researchers at <a href="https://arxiv.org/abs/2309.04134" target="_blank">Brown University</a>.
+        </div>
+
+        <div class="footnote">
+            Don't like the site in its current state—at all even? Learn some Rust by contributing to <a href="http://github.com/janpaulpl/rust-typer-site" target="_blank">this repo</a>!
+        </div>
     </div>
 
     <script src="./assets/js/typer.js"></script>
