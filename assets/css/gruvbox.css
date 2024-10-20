@@ -61,3 +61,12 @@ input[type="file"], button[type="random-file"] {
     color: #b16286;  /* Gruvbox purple */
     font-weight: bold;
 }
+
+/* Thick static cursor */
+.cursor {
+    display: inline-block;
+    width: 10px; /* Adjust thickness */
+    height: 1em; /* Full height of the text */
+    background-color: #ebdbb2; /* Gruvbox color for the cursor */
+    vertical-align: bottom;
+}

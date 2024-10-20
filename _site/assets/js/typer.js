@@ -117,7 +117,7 @@ function displayNextChars() {
     }
 
     // Apply syntax highlighting and update the output
-    output.innerHTML = applyRustHighlighting(buffer);
+    output.innerHTML = applyRustHighlighting(buffer) + `<span class="cursor">█</span>`;  // Add the cursor
 }
 
 // Listen for keypress events to simulate typing
@@ -136,10 +136,10 @@ fileGuessBtn.addEventListener('click', () => {
         output.innerHTML = applyRustHighlighting(lines.join("\n")); // Display full file
     } else {
         // Wrong guess
-        fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! <code>.rs</code> is important!</span>`;
+        fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! Loading an image...</span>`;
         output.innerHTML = ''; // Clear the text
         // Load and display the image
-        output.innerHTML = `<img id="error-image" src="./assets/img/rust.jpg" alt="Error image" />`;
+        output.innerHTML = `<img id="error-image" src="./assets/img/wrong-answer.jpg" alt="Error image" />`;
     }
 });
 
