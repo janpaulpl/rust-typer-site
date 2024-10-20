@@ -8,7 +8,7 @@ let currentChar = 0;
 let buffer = '';  // Buffer to hold the characters of the current line
 
 // Rust-themed shitpost message
-const rustShitpost = `What is this, JavaScript? Upload Rust files only, hacker! 🦀`;
+const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
 
 // Function to apply basic syntax highlighting
 function applyRustHighlighting(text) {
