@@ -81,38 +81,48 @@ async function loadRandomFile() {
     }
 }
 
-// Displays the next character in the current file with manual Rust highlighting
-function displayNextChar() {
+// Displays the next 5-10 characters in the current file with manual Rust highlighting
+function displayNextChars() {
     if (currentLine >= lines.length) {
-        return;  // Stop typing when file is done
+        return;  // Stop typing when the file is done
     }
 
     const line = lines[currentLine];
 
-    if (currentChar < line.length) {
+    // Determine how many characters to display (random between 5 and 10)
+    const charsToDisplay = Math.floor(Math.random() * 6) + 5;  // Random number between 5 and 10
+    let charsAdded = 0;
+
+    // Add characters to the buffer, but only up to charsToDisplay
+    while (currentChar < line.length && charsAdded < charsToDisplay) {
         buffer += line[currentChar];  // Accumulate characters in the buffer
-        output.innerHTML = applyRustHighlighting(buffer);  // Apply manual syntax highlighting
         currentChar++;
-    } else {
+        charsAdded++;
+    }
+
+    // If the end of the line is reached, move to the next line
+    if (currentChar >= line.length) {
         buffer += "\n";  // Add a line break when the full line is complete
         currentLine++;
         currentChar = 0;
-        output.innerHTML = applyRustHighlighting(buffer);  // Reapply manual syntax highlighting
     }
+
+    // Apply syntax highlighting and update the output
+    output.innerHTML = applyRustHighlighting(buffer);
 }
+
+// Listen for keypress events to simulate typing
+document.addEventListener("keypress", (event) => {
+    if (event.key.length === 1) { // Only handle actual character input
+        displayNextChars();  // Display 5-10 characters per keystroke
+    }
+});
 
 // Load a new random file when the button is clicked
 randomFileButton.addEventListener("click", () => {
     loadRandomFile();  // Load a new random file
     buffer = '';  // Reset buffer for new file
     output.innerHTML = '';  // Clear output for new content
-});
-
-// Listen for keypress events to simulate typing
-document.addEventListener("keypress", (event) => {
-    if (event.key.length === 1) { // Only handle actual character input
-        displayNextChar();
-    }
 });
 
 // Initially load a random file
