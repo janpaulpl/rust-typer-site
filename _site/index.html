@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Types.rs</title>
+    <title>Typer.rs</title>
     <style>
         body {
             font-family: 'Fira Code', monospace;
@@ -27,14 +27,23 @@
             padding: 15px;
             border-radius: 8px;
             white-space: pre-wrap;
-            font-size: 12px; /* Smaller font size */
+            font-size: 12px;
             margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
         }
 
-        #file-guess-output {
-            margin-top: 20px;
-            font-size: 14px;
-            font-weight: bold;
+        #output::-webkit-scrollbar { 
+            width: 0;
+            height: 0;
+        }
+
+        #button-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
         }
 
         button, .custom-file-upload {
@@ -54,7 +63,7 @@
         }
 
         input[type="file"] {
-            display: none; /* Hide the actual file input */
+            display: none;
         }
 
         input[type="text"] {
@@ -74,28 +83,36 @@
         }
 
         .keyword {
-            color: #d79921;  /* Gruvbox yellow */
+            color: #fb4934;
             font-weight: bold;
         }
 
         .type {
-            color: #b16286;  /* Gruvbox purple */
+            color: #b8bb26;
             font-weight: bold;
         }
 
         .symbol {
-            color: #8ec07c;  /* Gruvbox green */
+            color: #8ec07c;
+        }
+
+        .string {
+            color: #fabd2f;
+        }
+
+        .comment {
+            color: #928374;
+            font-style: italic;
         }
 
         .correct {
-            color: #b8bb26; /* Gruvbox green */
+            color: #b8bb26;
         }
 
         .wrong {
-            color: #fb4934; /* Gruvbox red */
+            color: #fb4934;
         }
 
-        /* Low opacity text for speed typing mode */
         .low-opacity {
             opacity: 0.3;
         }
@@ -104,7 +121,6 @@
             opacity: 1;
         }
 
-        /* Learn Rust section styling */
         .learn-rust {
             margin-top: 50px;
             text-align: center;
@@ -121,36 +137,41 @@
             text-decoration: underline;
         }
 
-        /* Image styling */
         #error-image {
             max-width: 100%;
             margin-top: 20px;
+        }
+
+        .thick-cursor {
+            font-weight: bold;
+            background-color: #ebdbb2;
+            color: #1d2021;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Types<code>.rs</code></h1>
+    <h1>Typer<code>.rs</code></h1>
     <p>A typing game on the Rust compiler.</p>
 
-    <label for="file-upload" class="custom-file-upload">Upload<code>.rs</code></label>
-    <br><br>
-    <input type="file" id="file-upload" />
-    <button id="random-file-btn">Random<code>.rs</code></button>
+    <div id="button-container">
+        <button id="terminal-mode-btn">Terminal<code>.rs</code></button>
+        <button id="random-file-btn">Random<code>.rs</code></button>
+        <label for="file-upload" class="custom-file-upload">Upload<code>.rs</code></label>
+        <input type="file" id="file-upload" />
+    </div>
+
     <pre id="output"></pre>
 
-    <!-- File guessing game section -->
     <div id="file-guess-game">
         <h2>Filename<code>.rs</code></h2>
         <p>If you're bored and want to complete the file, guess the name, and it will complete the code for you.</p>
         <input type="text" id="file-guess" placeholder="file.rs ..." />
         <button id="file-guess-btn">Submit<code>.rs</code></button>
-        <div id="file-guess-output"></div>
     </div>
 
-    <!-- "Learn Rust" message at the bottom -->
     <div class="learn-rust">
-        <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">the Rust book</a> by some Brown University researchers.</p>
+        <p>Want to learn Rust? Check out <a href="https://rust-book.cs.brown.edu" target="_blank">the Rust book</a> by some researchers at <a href="https://arxiv.org/abs/2309.04134" target="_blank">Brown University</a>.</p>
     </div>
 
     <script src="./assets/js/typer.js"></script>
