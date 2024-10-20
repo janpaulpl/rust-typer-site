@@ -133,39 +133,47 @@ function handleOutputTap(event) {
         // Prevent the default action to avoid any unwanted behavior
         event.preventDefault();
         
-        // Create a temporary input element
-        const tempInput = document.createElement('input');
-        tempInput.style.position = 'absolute';
-        tempInput.style.opacity = 0;
-        tempInput.style.height = 0;
-        tempInput.style.fontSize = '16px'; // This prevents zoom on iOS
-
-        // Add it to the body
-        document.body.appendChild(tempInput);
-
-        // Focus and remove the element
-        tempInput.focus();
-        setTimeout(() => {
-            document.body.removeChild(tempInput);
-        }, 100);
-
-        // Re-focus on the output element
+        // Make the output element focusable
+        output.setAttribute('contenteditable', 'true');
+        
+        // Focus on the output element
         output.focus();
+        
+        // Place the cursor at the end of the content
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(output);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        
+        // Scroll to the cursor position
+        output.scrollTop = output.scrollHeight;
     }
 }
 
 // Add the event listener to the output element
 output.addEventListener('touchstart', handleOutputTap);
 
-// Prevent default keyboard behavior and handle typing
+// Prevent default behavior for specific keys and handle typing
 output.addEventListener('keydown', function(e) {
+    // Allow arrow keys, backspace, and delete for navigation
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Backspace', 'Delete'].includes(e.key)) {
+        return;
+    }
+    
     e.preventDefault();
     handleTyping(e);
 });
 
+// Prevent paste events
+output.addEventListener('paste', function(e) {
+    e.preventDefault();
+});
+
 // Handle typing
 function handleTyping(event) {
-    if (document.activeElement === fileGuessInput || testFinished) {
+    if (testFinished) {
         return;
     }
 
