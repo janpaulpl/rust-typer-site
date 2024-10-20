@@ -4,11 +4,25 @@ const fileUpload = document.getElementById("file-upload");
 const fileGuessBtn = document.getElementById("file-guess-btn");
 const fileGuessOutput = document.getElementById("file-guess-output");
 const fileGuessInput = document.getElementById("file-guess");
-let lines = [];
-let currentLine = 0;
+let fullCode = '';
 let currentChar = 0;
-let buffer = '';  // Buffer to hold the characters of the current line
-let currentFileName = ''; // Variable to hold the current file name
+let currentFileName = '';
+let testFinished = false;
+let startTime;
+let typedChars = 0;
+let inTerminalMode = false;
+
+// Create Terminal Mode button
+const terminalModeBtn = document.createElement("button");
+terminalModeBtn.innerHTML = "Terminal Mode";
+terminalModeBtn.id = "terminal-mode-btn";
+
+// Move Terminal Mode button to the top
+const buttonContainer = document.createElement("div");
+buttonContainer.id = "button-container";
+buttonContainer.appendChild(randomFileButton);
+buttonContainer.appendChild(terminalModeBtn);
+document.body.insertBefore(buttonContainer, fileUpload);
 
 // Rust-themed shitpost message
 const rustShitpost = `What is this, JavaScript? Upload Rust files only! 🦀`;
@@ -24,35 +38,28 @@ function applyRustHighlighting(text) {
 // Handle file upload and show the content in the game
 fileUpload.addEventListener('change', (event) => {
     const file = event.target.files[0];
-
     if (file) {
-        // Check if the uploaded file is a Rust file
         if (!file.name.endsWith('.rs')) {
-            // Display the Rust-themed shitpost if it's not a Rust file
             output.innerHTML = rustShitpost;
-            return;  // Stop further processing
+            return;
         }
-
-        // If it's a Rust file, read and display the file content
         const reader = new FileReader();
         reader.onload = function(e) {
-            const content = e.target.result;
-            lines = content.split("\n"); // Split content by lines
-            currentLine = 0;
+            fullCode = e.target.result;
             currentChar = 0;
-            buffer = '';  // Reset the buffer
-            output.innerHTML = ''; // Clear previous output
+            output.innerHTML = '';
+            displayCode();
+            startTypingTest();
         };
         reader.readAsText(file);
     }
 });
 
-// Fetches a random file from the assets/data directory based on the files listed in files.json
+// Fetches a random file from the assets/data directory
 async function loadRandomFile() {
     try {
         output.textContent = 'Loading a random file...';
-
-        const fileListResponse = await fetch('./assets/data/files.json'); // Fetch the list of files
+        const fileListResponse = await fetch('./assets/data/files.json');
         if (!fileListResponse.ok) throw new Error('Could not fetch files.json');
         
         const fileListData = await fileListResponse.json();
@@ -62,21 +69,16 @@ async function loadRandomFile() {
             throw new Error('No files available in the data directory.');
         }
 
-        // Choose a random file from the list
         const randomFile = files[Math.floor(Math.random() * files.length)];
         currentFileName = randomFile;
 
-        // Fetch the content of the random file
         const response = await fetch(`./assets/data/${randomFile}`);
         if (!response.ok) throw new Error(`File not found: ${randomFile}`);
 
-        // Read and split file content into lines
-        const text = await response.text();
-        lines = text.split("\n");
-        currentLine = 0;
+        fullCode = await response.text();
         currentChar = 0;
-        buffer = '';  // Reset the buffer
-        output.innerHTML = ''; // Clear previous output
+        displayCode();
+        startTypingTest();
 
         console.log(`Loaded file: ${randomFile}`);
     } catch (error) {
@@ -86,68 +88,167 @@ async function loadRandomFile() {
 }
 
 // Automatically load a random file when the page loads
-window.addEventListener('load', () => {
-    loadRandomFile();
+window.addEventListener('load', loadRandomFile);
+
+// Prevent the spacebar from activating the page scrollbar
+window.addEventListener('keydown', (event) => {
+    if (event.code === "Space" && event.target === document.body) {
+        event.preventDefault();
+    }
 });
 
-// Displays the next 5-10 characters in the current file with manual Rust highlighting
-function displayNextChars() {
-    if (currentLine >= lines.length) {
-        return;  // Stop typing when the file is done
+// Function to display the code with proper highlighting
+function displayCode() {
+    if (inTerminalMode) {
+        let typedText = fullCode.substring(0, currentChar);
+        output.innerHTML = `${applyRustHighlighting(typedText)}<span class="thick-cursor">█</span>`;
+    } else {
+        let typedText = fullCode.substring(0, currentChar);
+        let nextChar = fullCode[currentChar] || '';
+        let remainingText = fullCode.substring(currentChar + 1);
+
+        let highlightedNextChar = nextChar;
+        if (nextChar === ' ' || nextChar === '\n' || nextChar === '\t') {
+            highlightedNextChar = '<span style="background-color: #3c3836;">␣</span>';
+        }
+
+        output.innerHTML = `<span class="highlighted">${applyRustHighlighting(typedText)}</span>` +
+            `<span class="cursor">${highlightedNextChar}</span>` +
+            `<span class="low-opacity">${applyRustHighlighting(remainingText)}</span>`;
     }
-
-    const line = lines[currentLine];
-
-    // Determine how many characters to display (random between 5 and 10)
-    const charsToDisplay = Math.floor(Math.random() * 6) + 5;  // Random number between 5 and 10
-    let charsAdded = 0;
-
-    // Add characters to the buffer, but only up to charsToDisplay
-    while (currentChar < line.length && charsAdded < charsToDisplay) {
-        buffer += line[currentChar];  // Accumulate characters in the buffer
-        currentChar++;
-        charsAdded++;
-    }
-
-    // If the end of the line is reached, move to the next line
-    if (currentChar >= line.length) {
-        buffer += "\n";  // Add a line break when the full line is complete
-        currentLine++;
-        currentChar = 0;
-    }
-
-    // Apply syntax highlighting and update the output
-    output.innerHTML = applyRustHighlighting(buffer) + `<span class="cursor">█</span>`;  // Add the cursor
 }
 
-// Listen for keypress events to simulate typing
-document.addEventListener('keypress', (event) => {
-    if (event.key.length === 1) { // Only handle actual character input
-        displayNextChars();  // Display 5-10 characters per keystroke
+// Handle typing
+document.addEventListener('keydown', (event) => {
+    if (document.activeElement === fileGuessInput || testFinished) {
+        return;
     }
+
+    if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt') {
+        return; // Ignore modifier keys
+    }
+
+    event.preventDefault(); // Prevent default for all other keys
+
+    if (inTerminalMode) {
+        handleTerminalMode();
+    } else if (currentChar < fullCode.length) {
+        let expectedChar = fullCode[currentChar];
+
+        if (event.key === expectedChar || 
+           (expectedChar === '\n' && event.key === 'Enter') ||
+           (expectedChar === '\t' && event.key === 'Tab')) {
+            currentChar++;
+            typedChars++;
+            displayCode();
+
+            if (currentChar >= fullCode.length) {
+                endSpeedTypingTest();
+            }
+        } else {
+            // Show wrong character in red
+            let typedText = fullCode.substring(0, currentChar);
+            let wrongChar = `<span style="color: #fb4934; background-color: #3c3836;">${event.key === ' ' ? '␣' : event.key}</span>`;
+            let remainingText = fullCode.substring(currentChar);
+
+            output.innerHTML = `<span class="highlighted">${applyRustHighlighting(typedText)}</span>` +
+                wrongChar +
+                `<span class="low-opacity">${applyRustHighlighting(remainingText)}</span>`;
+        }
+    }
+});
+
+function startTypingTest() {
+    startTime = new Date();
+    typedChars = 0;
+    testFinished = false;
+}
+
+function calculateWPM() {
+    const endTime = new Date();
+    const timeElapsed = (endTime - startTime) / 60000; // in minutes
+    return Math.round((typedChars / 5) / timeElapsed); // Assuming average word length of 5 characters
+}
+
+function endSpeedTypingTest() {
+    testFinished = true;
+    const wpm = calculateWPM();
+    output.innerHTML = applyRustHighlighting(fullCode);
+    output.classList.remove('low-opacity');
+    output.innerHTML += `<br><span style="color: green;">You Win! WPM: ${wpm}. Click "Load New Random File" to play again.</span>`;
+}
+
+// Reset game and load a new file when "Load New" button is clicked
+randomFileButton.addEventListener("click", () => {
+    loadRandomFile();
+    fileGuessOutput.innerHTML = '';
+    fileGuessInput.value = '';
+    testFinished = false;
+    inTerminalMode = false;
+    terminalModeBtn.innerHTML = "Terminal Mode";
 });
 
 // File guessing game logic
 fileGuessBtn.addEventListener('click', () => {
     const guess = fileGuessInput.value.trim();
+    const wpm = calculateWPM();
     if (guess === currentFileName) {
-        // Correct guess
-        fileGuessOutput.innerHTML = `<span class="correct">You got it! Completing the code...</span>`;
-        output.innerHTML = applyRustHighlighting(lines.join("\n")); // Display full file
+        fileGuessOutput.innerHTML = `<span class="correct">You got it! Completing the code... Crab WPM: ${wpm} 🦀</span>`;
+        inTerminalMode = false;
+        terminalModeBtn.innerHTML = "Terminal Mode";
+        output.innerHTML = applyRustHighlighting(fullCode);
+        output.classList.remove('low-opacity');
+        testFinished = true;
     } else {
-        // Wrong guess
-        fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! Loading an image...</span>`;
-        output.innerHTML = ''; // Clear the text
-        // Load and display the image
-        output.innerHTML = `<img id="error-image" src="./assets/img/wrong-answer.jpg" alt="Error image" />`;
+        fileGuessOutput.innerHTML = `<span class="wrong">Wrong guess! Try again... Crab WPM: ${wpm} 🦀</span>`;
+        output.innerHTML = `<img id="error-image" src="./assets/img/rust.jpg" alt="Error image" />`;
+        document.getElementById("error-image").addEventListener('click', () => {
+            loadRandomFile();
+            inTerminalMode = true;
+            terminalModeBtn.innerHTML = "Exit Terminal Mode";
+            currentChar = 0;
+            displayCode();
+        });
     }
 });
 
-// Reset game and load a new file when "Load New" button is clicked
-randomFileButton.addEventListener("click", () => {
-    loadRandomFile();  // Load a new random file
-    buffer = '';  // Reset buffer for new file
-    output.innerHTML = '';  // Clear output for new content
-    fileGuessOutput.innerHTML = '';  // Clear the guess output
-    fileGuessInput.value = '';  // Clear the input field
+// Terminal Mode logic
+function handleTerminalMode() {
+    const charsToComplete = Math.floor(Math.random() * 6) + 5; // Complete 5 to 10 characters
+    for (let i = 0; i < charsToComplete && currentChar < fullCode.length; i++) {
+        currentChar++;
+        typedChars++;
+    }
+    displayCode();
+
+    if (currentChar >= fullCode.length) {
+        endSpeedTypingTest();
+        inTerminalMode = false;
+        terminalModeBtn.innerHTML = "Terminal Mode";
+    }
+}
+
+// Terminal Mode button event listener
+terminalModeBtn.addEventListener("click", () => {
+    inTerminalMode = !inTerminalMode;
+    if (inTerminalMode) {
+        terminalModeBtn.innerHTML = "Exit Terminal Mode";
+        currentChar = 0;
+        startTypingTest();
+    } else {
+        terminalModeBtn.innerHTML = "Terminal Mode";
+    }
+    displayCode();
 });
+
+// Add CSS for thick cursor
+const style = document.createElement('style');
+style.textContent = `
+    .thick-cursor {
+        font-weight: bold;
+        background-color: #282828;
+        color: #ebdbb2;
+        margin-left: -2px;
+    }
+`;
+document.head.appendChild(style);

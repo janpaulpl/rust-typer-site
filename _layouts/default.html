@@ -95,6 +95,15 @@
             color: #fb4934; /* Gruvbox red */
         }
 
+        /* Low opacity text for speed typing mode */
+        .low-opacity {
+            opacity: 0.3;
+        }
+
+        .highlighted {
+            opacity: 1;
+        }
+
         /* Learn Rust section styling */
         .learn-rust {
             margin-top: 50px;
@@ -124,10 +133,10 @@
     <h1>Rust Typing Game</h1>
     <p>A typing game for Rust files, loading random files.</p>
 
-    <button id="random-file-btn">Load New Random File</button>
     <label for="file-upload" class="custom-file-upload">Choose File</label>
-    <input type="file" id="file-upload" />
     <br><br>
+    <input type="file" id="file-upload" />
+    <button id="random-file-btn">Random File</button>
     <pre id="output"></pre>
 
     <!-- File guessing game section -->
@@ -147,4 +156,3 @@
     <script src="./assets/js/typer.js"></script>
 </body>
 </html>
-
