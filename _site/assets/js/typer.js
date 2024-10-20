@@ -236,7 +236,7 @@ terminalModeBtn.addEventListener("click", () => {
         currentChar = 0;
         startTypingTest();
     } else {
-        terminalModeBtn.innerHTML = "Terminal<code>.rs</code>";
+        terminalModeBtn.innerHTML = "<Terminal<code>.rs</code>";
     }
     displayCode();
 });
