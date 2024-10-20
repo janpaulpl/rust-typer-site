@@ -1,4 +1,4 @@
 title: "Rust Typing Game"
-description: "A typing game for Rust files, loading random files."
+description: "A typing game for the Rust compiler."
 baseurl: "/"
 url: "https://janpaul.pl"
